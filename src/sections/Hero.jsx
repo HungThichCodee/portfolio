@@ -27,29 +27,45 @@ export function Hero() {
             transition={{ duration: 0.6 }}
             className="lg:col-span-7"
           >
+            {DEV.image && (
+              <div className="relative mb-8 inline-flex items-center justify-center">
+                <div className="absolute -inset-1 animate-[pulse_3s_ease-in-out_infinite] rounded-full bg-gradient-to-r from-sky-500 via-fuchsia-500 to-emerald-500 opacity-60 blur-lg dark:opacity-50"></div>
+                <img
+                  src={DEV.image}
+                  alt={DEV.name}
+                  className="relative h-48 w-48 rounded-full object-cover shadow-2xl ring-4 ring-white dark:ring-zinc-950 sm:h-56 sm:w-56"
+                />
+              </div>
+            )}
             <p className="text-xs font-semibold uppercase tracking-widest text-zinc-600 dark:text-zinc-300">
               {DEV.title}
             </p>
             <h1 className="mt-3 text-4xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50 sm:text-5xl">
               {DEV.name}
             </h1>
-            <p className="mt-4 max-w-2xl text-base leading-7 text-zinc-700 dark:text-zinc-200">
-              {DEV.tagline}
-            </p>
+            {DEV.tagline && (
+              <p className="mt-4 max-w-2xl text-base leading-7 text-zinc-700 dark:text-zinc-200">
+                {DEV.tagline}
+              </p>
+            )}
 
             <div className="mt-6 flex flex-wrap gap-3">
               <Button onClick={() => scrollToId("projects")}>View Projects</Button>
-              <Button as="a" href={DEV.github} target="_blank" rel="noreferrer" variant="ghost">
-                GitHub
-              </Button>
+              {DEV.github && (
+                <Button as="a" href={DEV.github} target="_blank" rel="noreferrer" variant="ghost">
+                  GitHub
+                </Button>
+              )}
               <Button onClick={() => scrollToId("contact")} variant="ghost">
                 Contact
               </Button>
             </div>
 
-            <div className="mt-6">
-              <SocialLinks github={DEV.github} linkedin={DEV.linkedin} email={DEV.email} />
-            </div>
+            {(DEV.github || DEV.linkedin || DEV.email) && (
+              <div className="mt-6">
+                <SocialLinks github={DEV.github} linkedin={DEV.linkedin} email={DEV.email} />
+              </div>
+            )}
           </motion.div>
 
           <motion.div

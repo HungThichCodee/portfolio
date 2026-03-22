@@ -9,7 +9,7 @@ export function About() {
       <Container>
         <SectionHeading
           kicker="About"
-          title="Building systems that scale—end to end"
+          title="Building systems that scale - end to end"
           subtitle="I specialize in backend-heavy full-stack development: designing APIs, data models, and secure auth flows, then shipping polished UIs on top."
         />
 

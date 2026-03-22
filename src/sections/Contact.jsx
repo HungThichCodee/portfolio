@@ -17,7 +17,7 @@ export function Contact() {
         <SectionHeading
           kicker="Contact"
           title="Let’s build something great"
-          subtitle="Send a message or reach me via GitHub/LinkedIn. (This form is front-end only; wire it to an API later if needed.)"
+          subtitle="Send a message or reach me via GitHub/LinkedIn."
         />
 
         <div className="grid gap-4 lg:grid-cols-12">
