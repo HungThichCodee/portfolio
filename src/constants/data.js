@@ -1,4 +1,4 @@
-import avatarImg from "../assets/avatar2.png";
+import avatarImg from "../assets/avatar3.png";
 
 export const DEV = {
   name: "Danh Cao Lam Hung",
