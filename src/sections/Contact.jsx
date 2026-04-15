@@ -8,15 +8,46 @@ import { SocialLinks } from "../components/SocialLinks";
 import { DEV } from "../constants/data";
 
 export function Contact() {
-  const [status, setStatus] = useState("idle");
+  const [status, setStatus] = useState("idle"); // idle | sending | sent | error
+  const [formData, setFormData] = useState({ name: "", email: "", message: "" });
   const mailto = useMemo(() => `mailto:${DEV.email}`, []);
+
+  const handleChange = (e) => {
+    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setStatus("sending");
+
+    try {
+      const res = await fetch("http://localhost:3001/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.error || "Failed to send");
+      }
+
+      setStatus("sent");
+      setFormData({ name: "", email: "", message: "" });
+      setTimeout(() => setStatus("idle"), 5000);
+    } catch (err) {
+      console.error("Contact form error:", err);
+      setStatus("error");
+      setTimeout(() => setStatus("idle"), 5000);
+    }
+  };
 
   return (
     <section id="contact" className="py-16">
       <Container>
         <SectionHeading
           kicker="Contact"
-          title="Let’s build something great"
+          title="Let's build something great"
           subtitle="Send a message or reach me via GitHub/LinkedIn."
         />
 
@@ -49,17 +80,14 @@ export function Contact() {
             transition={{ delay: 0.05 }}
           >
             <Card>
-              <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  setStatus("sent");
-                }}
-                className="grid gap-3"
-              >
+              <form onSubmit={handleSubmit} className="grid gap-3">
                 <div className="grid gap-3 sm:grid-cols-2">
                   <label className="grid gap-1 text-sm">
                     <span className="font-semibold text-zinc-800 dark:text-zinc-100">Name</span>
                     <input
+                      name="name"
+                      value={formData.name}
+                      onChange={handleChange}
                       className="rounded-xl border border-zinc-200/70 bg-white/60 px-3 py-2 outline-none backdrop-blur focus:ring-2 focus:ring-sky-500/60 dark:border-white/10 dark:bg-zinc-950/30 dark:text-zinc-50"
                       placeholder="Your name"
                       required
@@ -69,7 +97,10 @@ export function Contact() {
                   <label className="grid gap-1 text-sm">
                     <span className="font-semibold text-zinc-800 dark:text-zinc-100">Email</span>
                     <input
+                      name="email"
                       type="email"
+                      value={formData.email}
+                      onChange={handleChange}
                       className="rounded-xl border border-zinc-200/70 bg-white/60 px-3 py-2 outline-none backdrop-blur focus:ring-2 focus:ring-sky-500/60 dark:border-white/10 dark:bg-zinc-950/30 dark:text-zinc-50"
                       placeholder="you@example.com"
                       required
@@ -80,7 +111,10 @@ export function Contact() {
                 <label className="grid gap-1 text-sm">
                   <span className="font-semibold text-zinc-800 dark:text-zinc-100">Message</span>
                   <textarea
+                    name="message"
                     rows={5}
+                    value={formData.message}
+                    onChange={handleChange}
                     className="rounded-xl border border-zinc-200/70 bg-white/60 px-3 py-2 outline-none backdrop-blur focus:ring-2 focus:ring-sky-500/60 dark:border-white/10 dark:bg-zinc-950/30 dark:text-zinc-50"
                     placeholder="Tell me about your project..."
                     required
@@ -88,15 +122,22 @@ export function Contact() {
                 </label>
 
                 <div className="flex flex-wrap items-center gap-3 pt-1">
-                  <Button type="submit">Send message</Button>
+                  <Button type="submit" disabled={status === "sending"}>
+                    {status === "sending" ? "Sending..." : "Send message"}
+                  </Button>
                   <Button as="a" href={mailto} variant="ghost">
                     Email instead
                   </Button>
-                  {status === "sent" ? (
+                  {status === "sent" && (
                     <span className="text-sm font-semibold text-emerald-700 dark:text-emerald-300">
-                      Message ready (wire to backend later).
+                      Message sent successfully!
                     </span>
-                  ) : null}
+                  )}
+                  {status === "error" && (
+                    <span className="text-sm font-semibold text-red-600 dark:text-red-400">
+                      Failed to send. Please try again.
+                    </span>
+                  )}
                 </div>
               </form>
             </Card>
@@ -106,4 +147,3 @@ export function Contact() {
     </section>
   );
 }
-

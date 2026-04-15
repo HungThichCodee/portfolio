@@ -51,11 +51,6 @@ export function Hero() {
 
             <div className="mt-6 flex flex-wrap gap-3">
               <Button onClick={() => scrollToId("projects")}>View Projects</Button>
-              {DEV.github && (
-                <Button as="a" href={DEV.github} target="_blank" rel="noreferrer" variant="ghost">
-                  GitHub
-                </Button>
-              )}
               <Button onClick={() => scrollToId("contact")} variant="ghost">
                 Contact
               </Button>
