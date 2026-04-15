@@ -8,7 +8,7 @@ export const DEV = {
     "I build scalable backend systems and modern full‑stack apps with clean architecture, real-time features, and AI-powered experiences.",
   email: "danhcaolamhung9122004@gmail.com",
   github: "https://github.com/HungThichCodee",
-  linkedin: "https://linkedin.com/in/hưng-lâm-827a71382",
+  linkedin: "https://www.linkedin.com/in/lamhung-dev/",
 };
 
 export const NAV = [
