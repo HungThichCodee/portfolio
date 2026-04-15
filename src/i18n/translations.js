@@ -20,6 +20,7 @@ export const translations = {
     hero_focus_3: "AI recommendations + real-time features + background processing",
     hero_now_building: "Now building:",
     hero_now_building_desc: "scalable services, real-time apps, and AI-enhanced products.",
+    hero_tagline: "I build scalable backend systems and modern full-stack apps with clean architecture, real-time features, and AI-powered experiences.",
 
     // About
     about_kicker: "About",
@@ -131,6 +132,7 @@ export const translations = {
     hero_focus_3: "G\u1ee3i \u00fd AI + t\u00ednh n\u0103ng th\u1eddi gian th\u1ef1c + x\u1eed l\u00fd n\u1ec1n",
     hero_now_building: "\u0110ang x\u00e2y d\u1ef1ng:",
     hero_now_building_desc: "d\u1ecbch v\u1ee5 m\u1edf r\u1ed9ng, \u1ee9ng d\u1ee5ng th\u1eddi gian th\u1ef1c v\u00e0 s\u1ea3n ph\u1ea9m t\u00edch h\u1ee3p AI.",
+    hero_tagline: "T\u00f4i x\u00e2y d\u1ef1ng h\u1ec7 th\u1ed1ng backend c\u00f3 kh\u1ea3 n\u0103ng m\u1edf r\u1ed9ng v\u00e0 \u1ee9ng d\u1ee5ng full-stack hi\u1ec7n \u0111\u1ea1i v\u1edbi ki\u1ebfn tr\u00fac s\u1ea1ch, t\u00ednh n\u0103ng th\u1eddi gian th\u1ef1c v\u00e0 tr\u1ea3i nghi\u1ec7m AI.",
 
     // About
     about_kicker: "Gi\u1edbi thi\u1ec7u",

@@ -46,11 +46,9 @@ export function Hero() {
             <h1 className="mt-3 text-4xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50 sm:text-5xl">
               {DEV.name}
             </h1>
-            {DEV.tagline && (
-              <p className="mt-4 max-w-2xl text-base leading-7 text-zinc-700 dark:text-zinc-200">
-                {DEV.tagline}
-              </p>
-            )}
+            <p className="mt-4 max-w-2xl text-base leading-7 text-zinc-700 dark:text-zinc-200">
+              {t("hero_tagline")}
+            </p>
 
             <div className="mt-6 flex flex-wrap gap-3">
               <Button onClick={() => scrollToId("projects")}>{t("hero_view_projects")}</Button>
