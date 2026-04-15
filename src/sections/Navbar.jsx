@@ -5,6 +5,7 @@ import { Button } from "../components/Button";
 import { NAV } from "../constants/data";
 import { scrollToId } from "../utils/scrollToId";
 import { useScrollSpy } from "../hooks/useScrollSpy";
+import { useLanguage } from "../i18n/LanguageContext";
 
 function ThemeToggle({ isDark, onToggle }) {
   return (
@@ -19,10 +20,34 @@ function ThemeToggle({ isDark, onToggle }) {
   );
 }
 
+function LanguageToggle() {
+  const { lang, toggle } = useLanguage();
+  return (
+    <button
+      onClick={toggle}
+      className="inline-flex items-center justify-center rounded-xl border border-zinc-200/70 bg-white/60 px-3 py-2 text-sm font-semibold text-zinc-800 backdrop-blur hover:bg-white/80 dark:border-white/10 dark:bg-zinc-900/40 dark:text-zinc-100 dark:hover:bg-zinc-900/60"
+      aria-label="Toggle language"
+      type="button"
+    >
+      {lang === "en" ? "VI" : "EN"}
+    </button>
+  );
+}
+
+const NAV_KEYS = {
+  home: "nav_home",
+  about: "nav_about",
+  skills: "nav_skills",
+  projects: "nav_projects",
+  experience: "nav_experience",
+  contact: "nav_contact",
+};
+
 export function Navbar({ isDark, onToggleTheme }) {
   const sectionIds = useMemo(() => NAV.map((n) => n.id), []);
   const active = useScrollSpy(sectionIds, 110);
   const [open, setOpen] = useState(false);
+  const { t } = useLanguage();
 
   return (
     <div className="fixed inset-x-0 top-0 z-50">
@@ -33,7 +58,7 @@ export function Navbar({ isDark, onToggleTheme }) {
             className="text-sm font-semibold tracking-tight text-zinc-900 dark:text-zinc-50"
             type="button"
           >
-            Portfolio
+            {t("nav_brand")}
           </button>
 
           <div className="hidden items-center gap-2 md:flex">
@@ -44,13 +69,15 @@ export function Navbar({ isDark, onToggleTheme }) {
                 onClick={() => scrollToId(item.id)}
                 className={active === item.id ? "font-extrabold" : "font-semibold"}
               >
-                {item.label}
+                {t(NAV_KEYS[item.id])}
               </Button>
             ))}
+            <LanguageToggle />
             <ThemeToggle isDark={isDark} onToggle={onToggleTheme} />
           </div>
 
           <div className="flex items-center gap-2 md:hidden">
+            <LanguageToggle />
             <ThemeToggle isDark={isDark} onToggle={onToggleTheme} />
             <button
               onClick={() => setOpen((v) => !v)}
@@ -58,7 +85,7 @@ export function Navbar({ isDark, onToggleTheme }) {
               type="button"
               aria-label="Open menu"
             >
-              Menu
+              {t("nav_menu")}
             </button>
           </div>
         </Container>
@@ -77,7 +104,7 @@ export function Navbar({ isDark, onToggleTheme }) {
                     className="rounded-xl px-3 py-2 text-left text-sm font-semibold text-zinc-800 hover:bg-zinc-900/5 dark:text-zinc-100 dark:hover:bg-white/10"
                     type="button"
                   >
-                    {item.label}
+                    {t(NAV_KEYS[item.id])}
                   </button>
                 ))}
               </div>
@@ -88,4 +115,3 @@ export function Navbar({ isDark, onToggleTheme }) {
     </div>
   );
 }
-

@@ -3,8 +3,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Container } from "../components/Container";
 import { SectionHeading } from "../components/SectionHeading";
 import { PROJECTS } from "../constants/data";
+import { useLanguage } from "../i18n/LanguageContext";
 
-/* ── tiny helper: section label ──────────────────────────────── */
+/* -- tiny helper: section label ----------------------------------------- */
 function SectionLabel({ children }) {
   return (
     <p className="mb-3 text-[11px] font-bold uppercase tracking-[0.15em] text-zinc-400 dark:text-zinc-500">
@@ -13,7 +14,7 @@ function SectionLabel({ children }) {
   );
 }
 
-/* ── tech badge row ──────────────────────────────────────────── */
+/* -- tech badge row ----------------------------------------------------- */
 function TechGroup({ label, value }) {
   if (!value) return null;
   const items = value.split(",").map((s) => s.trim());
@@ -23,12 +24,12 @@ function TechGroup({ label, value }) {
         {label}
       </span>
       <div className="flex flex-wrap gap-1.5">
-        {items.map((t) => (
+        {items.map((tech) => (
           <span
-            key={t}
+            key={tech}
             className="inline-flex items-center rounded-full border border-zinc-200/80 bg-zinc-50 px-2.5 py-0.5 text-[11px] font-medium text-zinc-600 dark:border-white/10 dark:bg-zinc-800/60 dark:text-zinc-300"
           >
-            {t}
+            {tech}
           </span>
         ))}
       </div>
@@ -36,9 +37,12 @@ function TechGroup({ label, value }) {
   );
 }
 
-/* ── project card ────────────────────────────────────────────── */
-function ProjectCard({ p, index }) {
+/* -- project card ------------------------------------------------------- */
+function ProjectCard({ p, index, projectIndex }) {
   const [isExpanded, setIsExpanded] = useState(false);
+  const { t } = useLanguage();
+
+  const prefix = `project${projectIndex + 1}`;
 
   return (
     <motion.article
@@ -51,26 +55,26 @@ function ProjectCard({ p, index }) {
         className="group relative cursor-pointer overflow-hidden rounded-2xl border border-zinc-200/70 bg-white/70 p-6 shadow-sm backdrop-blur transition-all duration-300 hover:shadow-lg hover:border-zinc-300/80 dark:border-white/10 dark:bg-zinc-900/40 dark:hover:border-white/30 sm:p-8"
         onClick={() => setIsExpanded(!isExpanded)}
       >
-        {/* ── Header: Title + Meta ─────────────────────────── */}
+        {/* -- Header: Title + Meta -- */}
         <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
           <div>
             <h3 className="text-xl font-semibold tracking-tight text-zinc-900 transition-colors group-hover:text-sky-600 dark:text-zinc-50 dark:group-hover:text-sky-400 sm:text-2xl">
-              {p.title}
+              {t(`${prefix}_title`)}
             </h3>
             <div className="mt-2 flex flex-wrap items-center gap-2.5">
               <span className="inline-flex items-center rounded-full bg-sky-50 px-2.5 py-0.5 text-[11px] font-semibold text-sky-700 ring-1 ring-inset ring-sky-600/20 dark:bg-sky-900/30 dark:text-sky-300 dark:ring-sky-400/20">
-                {p.type}
+                {t("projects_type_personal")}
               </span>
               <span className="text-xs text-zinc-400 dark:text-zinc-500">
                 •
               </span>
               <span className="text-xs font-medium text-zinc-500 dark:text-zinc-400">
-                Team size: {p.teamSize}
+                {t("projects_team_size")}: {p.teamSize}
               </span>
             </div>
           </div>
           <button className="hidden shrink-0 items-center gap-2 rounded-xl bg-zinc-100/50 px-4 py-2 text-sm font-semibold text-zinc-600 transition hover:bg-zinc-200/50 dark:bg-white/5 dark:text-zinc-300 dark:hover:bg-white/10 sm:inline-flex">
-            {isExpanded ? "Show Less" : "View Details"}
+            {isExpanded ? t("projects_show_less") : t("projects_view_details")}
             <svg
               className={`h-4 w-4 transition-transform duration-300 ${isExpanded ? "rotate-180" : ""}`}
               fill="none"
@@ -82,14 +86,14 @@ function ProjectCard({ p, index }) {
           </button>
         </div>
 
-        {/* ── Short Description (Clamped when collapsed) ─────────────────────────────────── */}
+        {/* -- Short Description (Clamped when collapsed) -- */}
         <div className="mt-5">
           <p className={`text-sm leading-relaxed text-zinc-600 transition-all duration-300 dark:text-zinc-300 sm:text-base sm:leading-7 ${isExpanded ? "" : "line-clamp-2"}`}>
-            {p.description}
+            {t(`${prefix}_desc`)}
           </p>
         </div>
 
-        {/* ── Expanded Content ─────────────────────────────────── */}
+        {/* -- Expanded Content -- */}
         <AnimatePresence initial={false}>
           {isExpanded && (
             <motion.div
@@ -99,12 +103,12 @@ function ProjectCard({ p, index }) {
               transition={{ duration: 0.3, ease: "easeInOut" }}
               className="overflow-hidden"
             >
-              {/* ── Divider ─────────────────────────────────────── */}
+              {/* -- Divider -- */}
               <div className="my-5 border-t border-zinc-100 dark:border-white/5 sm:my-6" />
 
-              {/* ── Technologies ────────────────────────────────── */}
+              {/* -- Technologies -- */}
               <div>
-                <SectionLabel>Technologies</SectionLabel>
+                <SectionLabel>{t("projects_technologies")}</SectionLabel>
                 <div className="mt-2 space-y-2.5">
                   <TechGroup label="Frontend" value={p.techStack.frontend} />
                   <TechGroup label="Backend" value={p.techStack.backend} />
@@ -113,26 +117,26 @@ function ProjectCard({ p, index }) {
                 </div>
               </div>
 
-              {/* ── Divider ─────────────────────────────────────── */}
+              {/* -- Divider -- */}
               <div className="my-5 border-t border-zinc-100 dark:border-white/5 sm:my-6" />
 
-              {/* ── Responsibilities ────────────────────────────── */}
+              {/* -- Responsibilities -- */}
               <div>
-                <SectionLabel>Responsibilities</SectionLabel>
+                <SectionLabel>{t("projects_responsibilities")}</SectionLabel>
                 <ul className="mt-2 max-w-3xl space-y-2.5">
-                  {p.responsibilities.map((r) => (
+                  {p.responsibilities.map((_, rIdx) => (
                     <li
-                      key={r}
+                      key={rIdx}
                       className="group/item flex gap-3 rounded-lg px-1 py-0.5 text-sm leading-relaxed text-zinc-600 transition-colors hover:bg-zinc-50 dark:text-zinc-300 dark:hover:bg-zinc-800/40"
                     >
                       <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-sky-500" />
-                      <span>{r}</span>
+                      <span>{t(`${prefix}_resp_${rIdx + 1}`)}</span>
                     </li>
                   ))}
                 </ul>
               </div>
 
-              {/* ── GitHub Link ────────────────────────────────── */}
+              {/* -- GitHub Link -- */}
               <div className="mt-6 border-t border-zinc-100 pt-6 dark:border-white/5">
                 <a
                   href={p.github}
@@ -153,17 +157,17 @@ function ProjectCard({ p, index }) {
                       clipRule="evenodd"
                     />
                   </svg>
-                  View on GitHub
+                  {t("projects_view_github")}
                 </a>
               </div>
             </motion.div>
           )}
         </AnimatePresence>
 
-        {/* ── Mobile toggle button ─────────────────────────── */}
+        {/* -- Mobile toggle button -- */}
         <div className="mt-5 flex justify-center border-t border-zinc-100 pt-4 dark:border-white/5 sm:hidden">
           <button className="text-sm font-semibold text-sky-600 transition-colors hover:text-sky-700 dark:text-sky-400 dark:hover:text-sky-300">
-            {isExpanded ? "Show less" : "Read more"}
+            {isExpanded ? t("projects_show_less") : t("projects_read_more")}
           </button>
         </div>
       </div>
@@ -171,20 +175,22 @@ function ProjectCard({ p, index }) {
   );
 }
 
-/* ── section ─────────────────────────────────────────────────── */
+/* -- section ------------------------------------------------------------ */
 export function Projects() {
+  const { t } = useLanguage();
+
   return (
     <section id="projects" className="py-16 sm:py-20">
       <Container>
         <SectionHeading
-          kicker="Projects"
-          title="Selected work"
-          subtitle="Three flagship projects highlighting backend architecture, real-time systems, and AI integration."
+          kicker={t("projects_kicker")}
+          title={t("projects_title")}
+          subtitle={t("projects_subtitle")}
         />
 
         <div className="space-y-6">
           {PROJECTS.map((p, i) => (
-            <ProjectCard key={p.title} p={p} index={i} />
+            <ProjectCard key={p.title} p={p} index={i} projectIndex={i} />
           ))}
         </div>
       </Container>

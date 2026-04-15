@@ -3,6 +3,7 @@ import { Container } from "../components/Container";
 import { SectionHeading } from "../components/SectionHeading";
 import { Card } from "../components/Card";
 import { SKILLS } from "../constants/data";
+import { useLanguage } from "../i18n/LanguageContext";
 
 function Progress({ value }) {
   return (
@@ -19,13 +20,15 @@ function Progress({ value }) {
 }
 
 export function Skills() {
+  const { t } = useLanguage();
+
   return (
     <section id="skills" className="py-16">
       <Container>
         <SectionHeading
-          kicker="Tech Stack"
-          title="Tools I use to ship production systems"
-          subtitle="Frontend, backend, databases, and the integrations that power modern full-stack apps."
+          kicker={t("skills_kicker")}
+          title={t("skills_title")}
+          subtitle={t("skills_subtitle")}
         />
 
         <div className="grid gap-4 md:grid-cols-2">
@@ -58,4 +61,3 @@ export function Skills() {
     </section>
   );
 }
-

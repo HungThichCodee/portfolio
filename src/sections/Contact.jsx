@@ -6,11 +6,13 @@ import { Card } from "../components/Card";
 import { Button } from "../components/Button";
 import { SocialLinks } from "../components/SocialLinks";
 import { DEV } from "../constants/data";
+import { useLanguage } from "../i18n/LanguageContext";
 
 export function Contact() {
   const [status, setStatus] = useState("idle"); // idle | sending | sent | error
   const [formData, setFormData] = useState({ name: "", email: "", message: "" });
   const mailto = useMemo(() => `mailto:${DEV.email}`, []);
+  const { t } = useLanguage();
 
   const handleChange = (e) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -21,7 +23,7 @@ export function Contact() {
     setStatus("sending");
 
     try {
-      const res = await fetch("http://localhost:3001/api/contact", {
+      const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
@@ -46,9 +48,9 @@ export function Contact() {
     <section id="contact" className="py-16">
       <Container>
         <SectionHeading
-          kicker="Contact"
-          title="Let's build something great"
-          subtitle="Send a message or reach me via GitHub/LinkedIn."
+          kicker={t("contact_kicker")}
+          title={t("contact_title")}
+          subtitle={t("contact_subtitle")}
         />
 
         <div className="grid gap-4 lg:grid-cols-12">
@@ -59,12 +61,12 @@ export function Contact() {
             viewport={{ once: true }}
           >
             <Card>
-              <p className="text-sm font-semibold text-zinc-900 dark:text-zinc-50">Links</p>
+              <p className="text-sm font-semibold text-zinc-900 dark:text-zinc-50">{t("contact_links")}</p>
               <div className="mt-4">
                 <SocialLinks github={DEV.github} linkedin={DEV.linkedin} email={DEV.email} />
               </div>
               <div className="mt-6 text-sm text-zinc-700 dark:text-zinc-200">
-                Prefer email?{" "}
+                {t("contact_prefer_email")}{" "}
                 <a className="font-semibold text-sky-700 hover:text-sky-800 dark:text-sky-400" href={mailto}>
                   {DEV.email}
                 </a>
@@ -83,59 +85,56 @@ export function Contact() {
               <form onSubmit={handleSubmit} className="grid gap-3">
                 <div className="grid gap-3 sm:grid-cols-2">
                   <label className="grid gap-1 text-sm">
-                    <span className="font-semibold text-zinc-800 dark:text-zinc-100">Name</span>
+                    <span className="font-semibold text-zinc-800 dark:text-zinc-100">{t("contact_name")}</span>
                     <input
                       name="name"
                       value={formData.name}
                       onChange={handleChange}
                       className="rounded-xl border border-zinc-200/70 bg-white/60 px-3 py-2 outline-none backdrop-blur focus:ring-2 focus:ring-sky-500/60 dark:border-white/10 dark:bg-zinc-950/30 dark:text-zinc-50"
-                      placeholder="Your name"
+                      placeholder={t("contact_name_placeholder")}
                       required
                     />
                   </label>
 
                   <label className="grid gap-1 text-sm">
-                    <span className="font-semibold text-zinc-800 dark:text-zinc-100">Email</span>
+                    <span className="font-semibold text-zinc-800 dark:text-zinc-100">{t("contact_email")}</span>
                     <input
                       name="email"
                       type="email"
                       value={formData.email}
                       onChange={handleChange}
                       className="rounded-xl border border-zinc-200/70 bg-white/60 px-3 py-2 outline-none backdrop-blur focus:ring-2 focus:ring-sky-500/60 dark:border-white/10 dark:bg-zinc-950/30 dark:text-zinc-50"
-                      placeholder="you@example.com"
+                      placeholder={t("contact_email_placeholder")}
                       required
                     />
                   </label>
                 </div>
 
                 <label className="grid gap-1 text-sm">
-                  <span className="font-semibold text-zinc-800 dark:text-zinc-100">Message</span>
+                  <span className="font-semibold text-zinc-800 dark:text-zinc-100">{t("contact_message")}</span>
                   <textarea
                     name="message"
                     rows={5}
                     value={formData.message}
                     onChange={handleChange}
                     className="rounded-xl border border-zinc-200/70 bg-white/60 px-3 py-2 outline-none backdrop-blur focus:ring-2 focus:ring-sky-500/60 dark:border-white/10 dark:bg-zinc-950/30 dark:text-zinc-50"
-                    placeholder="Tell me about your project..."
+                    placeholder={t("contact_message_placeholder")}
                     required
                   />
                 </label>
 
                 <div className="flex flex-wrap items-center gap-3 pt-1">
                   <Button type="submit" disabled={status === "sending"}>
-                    {status === "sending" ? "Sending..." : "Send message"}
-                  </Button>
-                  <Button as="a" href={mailto} variant="ghost">
-                    Email instead
+                    {status === "sending" ? t("contact_sending") : t("contact_send")}
                   </Button>
                   {status === "sent" && (
                     <span className="text-sm font-semibold text-emerald-700 dark:text-emerald-300">
-                      Message sent successfully!
+                      {t("contact_sent")}
                     </span>
                   )}
                   {status === "error" && (
                     <span className="text-sm font-semibold text-red-600 dark:text-red-400">
-                      Failed to send. Please try again.
+                      {t("contact_error")}
                     </span>
                   )}
                 </div>

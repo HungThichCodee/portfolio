@@ -4,6 +4,7 @@ import { Button } from "../components/Button";
 import { SocialLinks } from "../components/SocialLinks";
 import { DEV } from "../constants/data";
 import { scrollToId } from "../utils/scrollToId";
+import { useLanguage } from "../i18n/LanguageContext";
 
 function Glow() {
   return (
@@ -16,6 +17,8 @@ function Glow() {
 }
 
 export function Hero() {
+  const { t } = useLanguage();
+
   return (
     <section id="home" className="relative pt-28">
       <Glow />
@@ -50,9 +53,9 @@ export function Hero() {
             )}
 
             <div className="mt-6 flex flex-wrap gap-3">
-              <Button onClick={() => scrollToId("projects")}>View Projects</Button>
+              <Button onClick={() => scrollToId("projects")}>{t("hero_view_projects")}</Button>
               <Button onClick={() => scrollToId("contact")} variant="ghost">
-                Contact
+                {t("hero_contact")}
               </Button>
             </div>
 
@@ -71,19 +74,18 @@ export function Hero() {
           >
             <div className="rounded-3xl border border-zinc-200/70 bg-white/70 p-6 shadow-sm backdrop-blur dark:border-white/10 dark:bg-zinc-900/40">
               <div className="flex items-center justify-between">
-                <p className="text-sm font-semibold text-zinc-900 dark:text-zinc-50">Focus</p>
+                <p className="text-sm font-semibold text-zinc-900 dark:text-zinc-50">{t("hero_focus")}</p>
                 <span className="rounded-full bg-emerald-500/15 px-2 py-1 text-xs font-semibold text-emerald-700 dark:text-emerald-300">
-                  Available for collaboration
+                  {t("hero_available")}
                 </span>
               </div>
               <ul className="mt-4 space-y-3 text-sm text-zinc-700 dark:text-zinc-200">
-                <li>Backend systems, APIs, authentication, and data modeling</li>
-                <li>Full-stack delivery with clean UI and robust architecture</li>
-                <li>AI recommendations + real-time features + background processing</li>
+                <li>{t("hero_focus_1")}</li>
+                <li>{t("hero_focus_2")}</li>
+                <li>{t("hero_focus_3")}</li>
               </ul>
               <div className="mt-6 rounded-2xl bg-zinc-950/5 p-4 text-xs text-zinc-700 dark:bg-white/5 dark:text-zinc-200">
-                <span className="font-semibold">Now building:</span> scalable services, real-time apps, and AI-enhanced
-                products.
+                <span className="font-semibold">{t("hero_now_building")}</span> {t("hero_now_building_desc")}
               </div>
             </div>
           </motion.div>
@@ -94,4 +96,3 @@ export function Hero() {
     </section>
   );
 }
-

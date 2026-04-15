@@ -1,32 +1,23 @@
-import "dotenv/config";
-import express from "express";
-import cors from "cors";
 import nodemailer from "nodemailer";
 
-const app = express();
-app.use(cors());
-app.use(express.json());
+export default async function handler(req, res) {
+  if (req.method !== "POST") {
+    return res.status(405).json({ error: "Method not allowed" });
+  }
 
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: process.env.EMAIL_USERNAME,
-    pass: process.env.EMAIL_PASSWORD,
-  },
-});
-
-// Verify connection on startup
-transporter.verify((err) => {
-  if (err) console.error("Email transporter error:", err.message);
-  else console.log("Email transporter ready");
-});
-
-app.post("/api/contact", async (req, res) => {
   const { name, email, message } = req.body;
 
   if (!name || !email || !message) {
     return res.status(400).json({ error: "All fields are required." });
   }
+
+  const transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: process.env.EMAIL_USERNAME,
+      pass: process.env.EMAIL_PASSWORD,
+    },
+  });
 
   try {
     await transporter.sendMail({
@@ -53,9 +44,4 @@ app.post("/api/contact", async (req, res) => {
     console.error("Failed to send email:", err.message);
     res.status(500).json({ error: "Failed to send email. Please try again." });
   }
-});
-
-const PORT = process.env.PORT || 3001;
-app.listen(PORT, () => {
-  console.log(`Email server running on http://localhost:${PORT}`);
-});
+}
