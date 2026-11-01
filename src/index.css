@@ -10,3 +10,22 @@ body {
   @apply min-h-screen bg-zinc-50 text-zinc-900 antialiased dark:bg-zinc-950 dark:text-zinc-50;
 }
 
+section,
+article[id] {
+  scroll-margin-top: 5.5rem;
+}
+
+:where(a, button, summary, input, textarea):focus-visible {
+  outline: 2px solid #0284c7;
+  outline-offset: 4px;
+}
+
+summary::-webkit-details-marker {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}

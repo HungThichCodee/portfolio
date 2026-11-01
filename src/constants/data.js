@@ -1,8 +1,9 @@
 import avatarImg from "../assets/avatar3.png";
+import foodmatchPreview from "../assets/foodmatch-preview.png";
 
 export const DEV = {
   name: "Danh Cao Lam Hung",
-  title: "BackEnd Developer",
+  title: "Backend Developer",
   image: avatarImg,
   tagline:
     "I build scalable backend systems and modern full‑stack apps with clean architecture, real-time features, and AI-powered experiences.",
@@ -13,9 +14,9 @@ export const DEV = {
 
 export const NAV = [
   { id: "home", label: "Home" },
+  { id: "projects", label: "Projects" },
   { id: "about", label: "About" },
   { id: "skills", label: "Skills" },
-  { id: "projects", label: "Projects" },
   { id: "experience", label: "Journey" },
   { id: "contact", label: "Contact" },
 ];
@@ -28,6 +29,7 @@ export const SKILLS = [
       { name: "Vite", level: 85 },
       { name: "TailwindCSS", level: 90 },
       { name: "JavaScript", level: 88 },
+      { name: "TypeScript" },
     ],
   },
   {
@@ -44,6 +46,7 @@ export const SKILLS = [
     group: "Database",
     items: [
       { name: "MySQL", level: 85 },
+      { name: "PostgreSQL" },
       { name: "SQL Server", level: 90 },
       { name: "Entity Framework", level: 88 },
       { name: "JPA / Hibernate", level: 82 },
@@ -54,6 +57,7 @@ export const SKILLS = [
     items: [
       { name: "JWT Authentication", level: 92 },
       { name: "REST API", level: 92 },
+      { name: "SignalR" },
       { name: "Machine Learning (ML.NET)", level: 75 },
       { name: "Hangfire", level: 80 },
       { name: "Cloudinary", level: 80 },
@@ -66,16 +70,40 @@ export const SKILLS = [
 
 export const PROJECTS = [
   {
+    id: "foodmatch",
+    i18nKey: "foodmatch",
+    title: "FoodMatch — Random Food & Dining Buddies",
+    featured: true,
+    image: foodmatchPreview,
+    tags: ["React", "TypeScript", ".NET 10", "PostgreSQL", "SignalR"],
+    techStack: {
+      frontend: "React 19, TypeScript, Vite, Tailwind CSS, Ant Design, Zustand",
+      backend: "ASP.NET Core (.NET 10), SignalR, Entity Framework Core, JWT",
+      database: "PostgreSQL, Supabase",
+      others:
+        "Google Maps, Cloudflare Turnstile, Docker, GitHub Actions, Vercel, Render",
+    },
+    responsibilities: [1, 2, 3, 4],
+    github: "https://github.com/HungThichCodee/random_food",
+    demo: "https://foodmatchh.vercel.app/",
+  },
+  {
+    id: "project1",
+    i18nKey: "project1",
+    tags: ["ASP.NET Core", "SQL Server", "VNPay"],
     title: "Bookstore Management & E-Commerce System",
     type: "Personal Project",
     description:
       "Developed a full-featured Bookstore Management and E-Commerce System supporting both online ordering and in-store POS selling. The platform enables customers to browse a product catalog, manage shopping carts, place orders with VNPay online payment or COD, accumulate loyalty points, and redeem vouchers/discounts — while providing administrators with comprehensive tools for catalog management, order processing, revenue analytics, and staff operations. The system implements a separated API–MVC architecture with secure authentication (BCrypt password hashing), role-based access control, SMTP email notifications for order confirmations, and rich reporting dashboards powered by Chart.js.",
     teamSize: 2,
     techStack: {
-      frontend: "ASP.NET Core MVC, Razor Views, Chart.js, X.PagedList, Rotativa (PDF), QRCoder",
-      backend: "ASP.NET Core Web API (.NET 9), Entity Framework Core, Repository Pattern",
+      frontend:
+        "ASP.NET Core MVC, Razor Views, Chart.js, X.PagedList, Rotativa (PDF), QRCoder",
+      backend:
+        "ASP.NET Core Web API (.NET 9), Entity Framework Core, Repository Pattern",
       database: "Microsoft SQL Server",
-      others: "VNPay Payment Gateway, BCrypt.Net, MailKit & System.Net.Mail (SMTP), ClosedXML (Excel), Swagger/OpenAPI",
+      others:
+        "VNPay Payment Gateway, BCrypt.Net, MailKit & System.Net.Mail (SMTP), ClosedXML (Excel), Swagger/OpenAPI",
     },
     responsibilities: [
       "Designed and implemented a layered architecture with separated Web API and MVC projects communicating via HttpClient over REST endpoints",
@@ -88,16 +116,22 @@ export const PROJECTS = [
     github: "https://github.com/HungThichCodee/QuanLy_Nha_Sach",
   },
   {
+    id: "project2",
+    i18nKey: "project2",
+    tags: ["ASP.NET Core", "SignalR", "ML.NET"],
     title: "CodeSphere – Social Blogging Platform",
     type: "Personal Project",
     description:
       "Built a feature-rich Social Blogging Platform enabling users to create and share blog posts, interact through real-time private messaging, and receive live notifications. The platform integrates ML.NET machine learning models for automated content moderation (post and comment classification), AI-powered content generation via Groq, and Hangfire background jobs for system maintenance tasks. It features a modular architecture organized by ASP.NET Core Areas (Administration, Editor, PrivateChat, UserNotifications, Identity), with real-time communication powered by SignalR for private chat, notification push, and online presence tracking, along with social login (Facebook, Google), Cloudinary media storage, SendGrid email delivery, and Twilio SMS verification.",
     teamSize: 2,
     techStack: {
-      frontend: "ASP.NET Core MVC, Razor Pages, Server-Side Blazor, BlazorStrap, TinyMCE, Bootstrap, FontAwesome",
-      backend: "ASP.NET Core (.NET 9), SignalR, Hangfire, ML.NET, Repository Pattern",
+      frontend:
+        "ASP.NET Core MVC, Razor Pages, Server-Side Blazor, BlazorStrap, TinyMCE, Bootstrap, FontAwesome",
+      backend:
+        "ASP.NET Core (.NET 9), SignalR, Hangfire, ML.NET, Repository Pattern",
       database: "Microsoft SQL Server, Entity Framework Core (Code First)",
-      others: "ML.NET (LightGbm, PredictionEnginePool), Groq AI, Cloudinary, SendGrid, Twilio, Google reCAPTCHA, Markdig, HtmlSanitizer, Facebook & Google OAuth",
+      others:
+        "ML.NET (LightGbm, PredictionEnginePool), Groq AI, Cloudinary, SendGrid, Twilio, Google reCAPTCHA, Markdig, HtmlSanitizer, Facebook & Google OAuth",
     },
     responsibilities: [
       "Architected a modular MVC application using ASP.NET Core Areas to cleanly separate Administration, Editor, PrivateChat, UserNotifications, and Identity modules",
@@ -110,16 +144,22 @@ export const PROJECTS = [
     github: "https://github.com/HungThichCodee/CodeSphere",
   },
   {
+    id: "project3",
+    i18nKey: "project3",
+    tags: ["Spring Boot", "React", "MySQL"],
     title: "Bus Ticket Booking System",
     type: "Personal Project",
     description:
       "Developed a comprehensive Bus Ticket Booking System with a Spring Boot REST API backend and two separate React SPA frontends (Customer and Admin). The platform covers the complete booking lifecycle — from trip search and seat selection to online payment, loyalty points accumulation, cargo shipping, and real-time notifications via WebSocket (STOMP). It features JWT-based authentication with fine-grained screen-level permission control (RBAC), scheduled background jobs for automatic trip completion and point allocation, multi-language support (i18n), and an admin dashboard with revenue analytics, route popularity reports, and coach utilization statistics.",
     teamSize: 2,
     techStack: {
-      frontend: "React 18, Vite, Material UI (MUI), React Query, React Router, Chart.js, Formik + Yup, i18next, SockJS + STOMP",
-      backend: "Java 17, Spring Boot 3.4, Spring Security + JWT, Spring Data JPA, Spring WebSocket (STOMP), Spring Cache, Spring Mail, Swagger/OpenAPI",
+      frontend:
+        "React 18, Vite, Material UI (MUI), React Query, React Router, Chart.js, Formik + Yup, i18next, SockJS + STOMP",
+      backend:
+        "Java 17, Spring Boot 3.4, Spring Security + JWT, Spring Data JPA, Spring WebSocket (STOMP), Spring Cache, Spring Mail, Swagger/OpenAPI",
       database: "MySQL",
-      others: "Twilio (SMS), Lombok, Google Cloud SQL Connector, Axios, react-pro-sidebar, QRCode",
+      others:
+        "Twilio (SMS), Lombok, Google Cloud SQL Connector, Axios, react-pro-sidebar, QRCode",
     },
     responsibilities: [
       "Built a dual-frontend architecture with separate React/Vite SPAs for customers (trip search, booking, payment, reviews) and administrators (fleet management, user management, analytics dashboards)",
@@ -149,4 +189,3 @@ export const JOURNEY = [
     body: "Implement real-time communication features (chat, notifications) and background processing with reliable job pipelines.",
   },
 ];
-

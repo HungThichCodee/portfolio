@@ -13,6 +13,7 @@ function ThemeToggle({ isDark, onToggle }) {
       onClick={onToggle}
       className="inline-flex items-center justify-center rounded-xl border border-zinc-200/70 bg-white/60 px-3 py-2 text-sm font-semibold text-zinc-800 backdrop-blur hover:bg-white/80 dark:border-white/10 dark:bg-zinc-900/40 dark:text-zinc-100 dark:hover:bg-zinc-900/60"
       aria-label="Toggle dark mode"
+      aria-pressed={isDark}
       type="button"
     >
       {isDark ? "Dark" : "Light"}
@@ -50,7 +51,7 @@ export function Navbar({ isDark, onToggleTheme }) {
   const { t } = useLanguage();
 
   return (
-    <div className="fixed inset-x-0 top-0 z-50">
+    <nav aria-label={t("nav_brand")} className="fixed inset-x-0 top-0 z-50">
       <div className="border-b border-zinc-200/60 bg-white/60 backdrop-blur dark:border-white/10 dark:bg-zinc-950/40">
         <Container className="flex h-16 items-center justify-between">
           <button
@@ -61,13 +62,15 @@ export function Navbar({ isDark, onToggleTheme }) {
             {t("nav_brand")}
           </button>
 
-          <div className="hidden items-center gap-2 md:flex">
+          <div className="hidden items-center gap-2 lg:flex">
             {NAV.map((item) => (
               <Button
                 key={item.id}
                 variant="link"
                 onClick={() => scrollToId(item.id)}
-                className={active === item.id ? "font-extrabold" : "font-semibold"}
+                className={
+                  active === item.id ? "font-extrabold" : "font-semibold"
+                }
               >
                 {t(NAV_KEYS[item.id])}
               </Button>
@@ -76,7 +79,7 @@ export function Navbar({ isDark, onToggleTheme }) {
             <ThemeToggle isDark={isDark} onToggle={onToggleTheme} />
           </div>
 
-          <div className="flex items-center gap-2 md:hidden">
+          <div className="flex items-center gap-2 lg:hidden">
             <LanguageToggle />
             <ThemeToggle isDark={isDark} onToggle={onToggleTheme} />
             <button
@@ -84,6 +87,8 @@ export function Navbar({ isDark, onToggleTheme }) {
               className="rounded-xl border border-zinc-200/70 bg-white/60 px-3 py-2 text-sm font-semibold backdrop-blur dark:border-white/10 dark:bg-zinc-900/40"
               type="button"
               aria-label="Open menu"
+              aria-expanded={open}
+              aria-controls="mobile-navigation"
             >
               {t("nav_menu")}
             </button>
@@ -91,7 +96,12 @@ export function Navbar({ isDark, onToggleTheme }) {
         </Container>
 
         {open ? (
-          <motion.div initial={{ height: 0 }} animate={{ height: "auto" }} className="md:hidden">
+          <motion.div
+            id="mobile-navigation"
+            initial={{ height: 0 }}
+            animate={{ height: "auto" }}
+            className="lg:hidden"
+          >
             <Container className="pb-4 pt-2">
               <div className="grid gap-1">
                 {NAV.map((item) => (
@@ -112,6 +122,6 @@ export function Navbar({ isDark, onToggleTheme }) {
           </motion.div>
         ) : null}
       </div>
-    </div>
+    </nav>
   );
 }

@@ -1,27 +1,17 @@
-import { motion } from "framer-motion";
 import { Container } from "../components/Container";
 import { SectionHeading } from "../components/SectionHeading";
-import { Card } from "../components/Card";
 import { SKILLS } from "../constants/data";
 import { useLanguage } from "../i18n/LanguageContext";
 
-function Progress({ value }) {
-  return (
-    <div className="mt-2 h-2 w-full rounded-full bg-zinc-200/70 dark:bg-white/10">
-      <motion.div
-        className="h-2 rounded-full bg-gradient-to-r from-sky-500 to-fuchsia-500"
-        initial={{ width: 0 }}
-        whileInView={{ width: `${value}%` }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.9, ease: "easeOut" }}
-      />
-    </div>
-  );
-}
+const GROUP_KEYS = {
+  Frontend: "tech_frontend",
+  Backend: "tech_backend",
+  Database: "tech_database",
+  Other: "tech_others",
+};
 
 export function Skills() {
   const { t } = useLanguage();
-
   return (
     <section id="skills" className="py-16">
       <Container>
@@ -30,31 +20,29 @@ export function Skills() {
           title={t("skills_title")}
           subtitle={t("skills_subtitle")}
         />
-
-        <div className="grid gap-4 md:grid-cols-2">
+        <div className="grid gap-4 sm:grid-cols-2">
           {SKILLS.map((group, idx) => (
-            <motion.div
+            <div
               key={group.group}
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: idx * 0.05 }}
+              className="rounded-2xl border border-zinc-200 bg-white p-6 dark:border-white/10 dark:bg-zinc-900/60"
             >
-              <Card>
-                <p className="text-sm font-semibold text-zinc-900 dark:text-zinc-50">{group.group}</p>
-                <div className="mt-4 space-y-3">
-                  {group.items.map((s) => (
-                    <div key={s.name}>
-                      <div className="flex items-center justify-between text-sm">
-                        <span className="text-zinc-800 dark:text-zinc-100">{s.name}</span>
-                        <span className="text-zinc-500 dark:text-zinc-400">{s.level}%</span>
-                      </div>
-                      <Progress value={s.level} />
-                    </div>
-                  ))}
-                </div>
-              </Card>
-            </motion.div>
+              <h3 className="font-semibold text-zinc-900 dark:text-zinc-50">
+                {t(GROUP_KEYS[group.group])}
+              </h3>
+              <ul className="mt-4 flex flex-wrap gap-2">
+                {group.items.map((skill) => (
+                  <li
+                    key={skill.name}
+                    className="rounded-lg bg-zinc-100 px-3 py-1.5 text-sm text-zinc-700 dark:bg-white/5 dark:text-zinc-200"
+                  >
+                    {skill.name === "Docker (optional)" ? "Docker" : skill.name}
+                  </li>
+                ))}
+              </ul>
+              <p className="mt-5 border-t border-zinc-100 pt-4 text-xs leading-6 text-zinc-600 dark:border-white/10 dark:text-zinc-400">
+                {t(`skills_evidence_${idx + 1}`)}
+              </p>
+            </div>
           ))}
         </div>
       </Container>
