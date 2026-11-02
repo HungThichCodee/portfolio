@@ -1,19 +1,26 @@
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Container } from "../components/Container";
 import { SectionHeading } from "../components/SectionHeading";
 import { PROJECTS } from "../constants/data";
 import { useLanguage } from "../i18n/LanguageContext";
 
-function ProjectCard({ project: p, index }) {
+function ProjectCard({ project: p, index, onViewDetails }) {
   const { t } = useLanguage();
   const prefix = p.i18nKey;
   return (
     <article
       id={`project-${p.id}`}
       aria-labelledby={`${p.id}-title`}
-      className={`overflow-hidden rounded-3xl border bg-white shadow-sm dark:bg-zinc-900/60 ${p.featured ? "border-sky-200 dark:border-sky-800" : "border-zinc-200 dark:border-white/10"}`}
+      className={`flex h-full flex-col overflow-hidden rounded-3xl border bg-white shadow-sm dark:bg-zinc-900/60 ${p.featured ? "border-sky-200 dark:border-sky-800" : "border-zinc-200 dark:border-white/10"}`}
     >
-      <div className={p.featured ? "grid lg:grid-cols-[1.1fr_1fr]" : ""}>
-        <div className="flex flex-col p-6 sm:p-8">
+      <div
+        className={
+          p.featured
+            ? "grid flex-1 lg:grid-cols-[1.1fr_1fr]"
+            : "flex flex-1 flex-col"
+        }
+      >
+        <div className="flex flex-1 flex-col p-6 sm:p-8">
           <div className="flex flex-wrap items-center gap-3 text-xs font-semibold">
             <span className="font-mono text-zinc-500 dark:text-zinc-400">
               0{index + 1}
@@ -35,11 +42,11 @@ function ProjectCard({ project: p, index }) {
           </div>
           <h3
             id={`${p.id}-title`}
-            className={`mt-4 font-semibold tracking-tight text-zinc-900 dark:text-zinc-50 ${p.featured ? "text-3xl sm:text-4xl" : "text-xl sm:text-2xl"}`}
+            className={`mt-4 font-semibold tracking-tight text-zinc-900 dark:text-zinc-50 ${p.featured ? "text-3xl sm:text-4xl" : "text-xl sm:text-2xl lg:min-h-24"}`}
           >
             {t(`${prefix}_title`)}
           </h3>
-          <p className="mt-4 text-sm leading-7 text-zinc-600 dark:text-zinc-300">
+          <p className="mt-4 flex-1 text-sm leading-7 text-zinc-600 dark:text-zinc-300">
             {t(`${prefix}_summary`)}
           </p>
           <ul
@@ -132,70 +139,159 @@ function ProjectCard({ project: p, index }) {
           </figure>
         )}
       </div>
-      <details className="group border-t border-zinc-200 dark:border-white/10">
-        <summary className="flex min-h-14 cursor-pointer list-none items-center justify-between gap-4 px-6 py-4 text-sm font-semibold text-sky-700 transition hover:bg-sky-50 dark:text-sky-300 dark:hover:bg-white/5 sm:px-8">
-          <span>
-            <span className="group-open:hidden">
-              {t("projects_view_details")}
-            </span>
-            <span className="hidden group-open:inline">
-              {t("projects_show_less")}
-            </span>
-            <span className="sr-only"> — {t(`${prefix}_title`)}</span>
-          </span>
-          <span
-            aria-hidden="true"
-            className="transition-transform group-open:rotate-45"
-          >
-            +
-          </span>
-        </summary>
-        <div className="space-y-6 px-6 pb-8 sm:px-8">
-          <p className="text-sm leading-7 text-zinc-600 dark:text-zinc-300">
-            {t(`${prefix}_desc`)}
-          </p>
-          <div>
-            <h4 className="text-sm font-semibold">
-              {t("projects_technologies")}
-            </h4>
-            <dl className="mt-3 space-y-3 text-sm leading-6">
-              {Object.entries(p.techStack).map(([key, value]) => (
-                <div key={key}>
-                  <dt className="font-medium text-zinc-800 dark:text-zinc-200">
-                    {t(`tech_${key}`)}
-                  </dt>
-                  <dd className="text-zinc-600 dark:text-zinc-400">{value}</dd>
-                </div>
-              ))}
-            </dl>
-          </div>
-          <div>
-            <h4 className="text-sm font-semibold">
-              {t(
-                p.featured
-                  ? "projects_implementation"
-                  : "projects_responsibilities",
-              )}
-            </h4>
-            <ul className="mt-3 space-y-3 text-sm leading-6 text-zinc-600 dark:text-zinc-300">
-              {p.responsibilities.map((_, n) => (
-                <li key={n} className="flex gap-3">
-                  <span aria-hidden="true" className="text-sky-600">
-                    •
-                  </span>
-                  <span>{t(`${prefix}_resp_${n + 1}`)}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      </details>
+      <button
+        type="button"
+        aria-haspopup="dialog"
+        onClick={() => onViewDetails(p)}
+        className="flex min-h-14 w-full items-center justify-between gap-4 border-t border-zinc-200 px-6 py-4 text-left text-sm font-semibold text-sky-700 transition hover:bg-sky-50 dark:border-white/10 dark:text-sky-300 dark:hover:bg-white/5 sm:px-8"
+      >
+        <span>
+          {t("projects_view_details")}
+          <span className="sr-only"> — {t(`${prefix}_title`)}</span>
+        </span>
+        <span aria-hidden="true">↗︎</span>
+      </button>
     </article>
+  );
+}
+
+function ProjectDialog({ project: p, onClose }) {
+  const { t } = useLanguage();
+  const prefix = p.i18nKey;
+  const dialogRef = useRef(null);
+
+  useEffect(() => {
+    const dialog = dialogRef.current;
+    const trigger = document.activeElement;
+    const previousOverflow = document.body.style.overflow;
+    dialog.showModal();
+    document.body.style.overflow = "hidden";
+    return () => {
+      dialog.close();
+      document.body.style.overflow = previousOverflow;
+      if (trigger instanceof HTMLElement && trigger.isConnected)
+        trigger.focus({ preventScroll: true });
+    };
+  }, []);
+
+  function handleBackdropClick(event) {
+    if (event.target !== event.currentTarget) return;
+    const bounds = event.currentTarget.getBoundingClientRect();
+    if (
+      event.clientX < bounds.left ||
+      event.clientX > bounds.right ||
+      event.clientY < bounds.top ||
+      event.clientY > bounds.bottom
+    )
+      onClose();
+  }
+
+  function handleKeyDown(event) {
+    if (event.key !== "Tab") return;
+    const focusable = [
+      ...event.currentTarget.querySelectorAll(
+        'button, a[href], [tabindex="0"]',
+      ),
+    ];
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
+    }
+  }
+
+  return (
+    <dialog
+      ref={dialogRef}
+      aria-labelledby="project-dialog-title"
+      onClose={() => {
+        if (!dialogRef.current?.open) onClose();
+      }}
+      onCancel={(event) => {
+        event.preventDefault();
+        onClose();
+      }}
+      onClick={handleBackdropClick}
+      onKeyDown={handleKeyDown}
+      className="fixed inset-0 m-auto max-h-[calc(100dvh-2rem)] w-[calc(100%-2rem)] max-w-3xl flex-col overflow-hidden rounded-2xl border border-zinc-200 bg-white p-0 text-zinc-900 shadow-2xl backdrop:bg-zinc-950/60 backdrop:backdrop-blur-sm open:flex dark:border-white/15 dark:bg-zinc-900 dark:text-zinc-50 sm:rounded-3xl"
+    >
+      <header className="flex shrink-0 items-start justify-between gap-4 border-b border-zinc-200 p-6 dark:border-white/10 sm:px-8">
+        <div className="min-w-0">
+          <p className="text-xs font-semibold uppercase tracking-wider text-sky-700 dark:text-sky-300">
+            {t("projects_view_details")}
+          </p>
+          <h2
+            id="project-dialog-title"
+            className="mt-2 text-xl font-semibold leading-snug tracking-tight sm:text-2xl"
+          >
+            {t(`${prefix}_title`)}
+          </h2>
+        </div>
+        <button
+          autoFocus
+          type="button"
+          onClick={onClose}
+          aria-label={t("projects_close_dialog")}
+          className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-zinc-200 text-2xl transition hover:bg-zinc-100 dark:border-white/15 dark:hover:bg-white/10"
+        >
+          <span aria-hidden="true">×</span>
+        </button>
+      </header>
+      <div
+        tabIndex={0}
+        aria-label={t("projects_view_details")}
+        className="min-h-0 flex-1 space-y-6 overflow-y-auto overscroll-contain p-6 sm:p-8"
+      >
+        <p className="text-sm leading-7 text-zinc-600 dark:text-zinc-300">
+          {t(`${prefix}_desc`)}
+        </p>
+        <div>
+          <h3 className="text-sm font-semibold">
+            {t("projects_technologies")}
+          </h3>
+          <dl className="mt-3 space-y-3 text-sm leading-6">
+            {Object.entries(p.techStack).map(([key, value]) => (
+              <div key={key}>
+                <dt className="font-medium text-zinc-800 dark:text-zinc-200">
+                  {t(`tech_${key}`)}
+                </dt>
+                <dd className="text-zinc-600 dark:text-zinc-400">{value}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+        <div>
+          <h3 className="text-sm font-semibold">
+            {t(
+              p.featured
+                ? "projects_implementation"
+                : "projects_responsibilities",
+            )}
+          </h3>
+          <ul className="mt-3 space-y-3 text-sm leading-6 text-zinc-600 dark:text-zinc-300">
+            {p.responsibilities.map((_, n) => (
+              <li key={n} className="flex gap-3">
+                <span aria-hidden="true" className="text-sky-600">
+                  •
+                </span>
+                <span>{t(`${prefix}_resp_${n + 1}`)}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </dialog>
   );
 }
 
 export function Projects() {
   const { t } = useLanguage();
+  const [selectedProject, setSelectedProject] = useState(null);
+  const closeDetails = useCallback(() => setSelectedProject(null), []);
   return (
     <section
       id="projects"
@@ -207,14 +303,21 @@ export function Projects() {
           title={t("projects_title")}
           subtitle={t("projects_subtitle")}
         />
-        <div className="grid items-start gap-6 lg:grid-cols-3">
+        <div className="grid items-stretch gap-6 lg:grid-cols-3">
           {PROJECTS.map((p, i) => (
             <div key={p.id} className={p.featured ? "lg:col-span-3" : ""}>
-              <ProjectCard project={p} index={i} />
+              <ProjectCard
+                project={p}
+                index={i}
+                onViewDetails={setSelectedProject}
+              />
             </div>
           ))}
         </div>
       </Container>
+      {selectedProject && (
+        <ProjectDialog project={selectedProject} onClose={closeDetails} />
+      )}
     </section>
   );
 }
